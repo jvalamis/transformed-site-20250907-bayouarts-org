@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:html' as html;
 import 'package:flutter/services.dart';
 import '../models/website_data.dart';
 
@@ -18,14 +19,16 @@ class DataService {
       _websiteData = WebsiteData.fromJson(jsonData);
       return _websiteData!;
     } catch (e) {
-      // If assets loading fails, try loading from web root
+      // If assets loading fails, try loading from web root using dart:html
       try {
         // Use Uri.base.resolve to respect the base href (GitHub Pages repo path)
         final url = Uri.base.resolve('site-data.json');
         
-        // For Flutter web, we need to use a different approach
-        // Since we can't use http package, we'll use the fallback data for now
-        throw Exception('Web loading not implemented yet');
+        // For Flutter web, use dart:html to fetch the JSON
+        final response = await html.HttpRequest.getString(url.toString());
+        final Map<String, dynamic> jsonData = json.decode(response);
+        _websiteData = WebsiteData.fromJson(jsonData);
+        return _websiteData!;
       } catch (webError) {
         // If loading fails, create a fallback data structure with Bayou Arts content
         _websiteData = WebsiteData(

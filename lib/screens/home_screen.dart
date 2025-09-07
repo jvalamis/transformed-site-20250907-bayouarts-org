@@ -189,7 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     return Container(
-      height: 400,
+      height: 500,
       width: double.infinity,
       child: Stack(
         fit: StackFit.expand,
@@ -210,6 +210,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   colors: [
                     Theme.of(context).colorScheme.primary,
                     Theme.of(context).colorScheme.secondary,
+                    Theme.of(context).colorScheme.tertiary,
                   ],
                 ),
               ),
@@ -223,8 +224,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 end: Alignment.bottomCenter,
                 colors: [
                   Colors.transparent,
-                  Colors.black.withOpacity(0.7),
+                  Colors.black.withOpacity(0.3),
+                  Colors.black.withOpacity(0.8),
                 ],
+                stops: const [0.0, 0.5, 1.0],
               ),
             ),
           ),
@@ -237,6 +240,27 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // Domain badge
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: ResponsiveLayout.spacing12,
+                    vertical: ResponsiveLayout.spacing6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary.withOpacity(0.9),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    _websiteData!.domain,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
+                  ),
+                ),
+                SizedBox(height: ResponsiveLayout.spacing16),
+                
+                // Main title
                 Text(
                   _websiteData!.title,
                   style: Theme.of(context).textTheme.displayMedium?.copyWith(
@@ -252,7 +276,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                 ),
                 if (_websiteData!.description.isNotEmpty) ...[
-                  SizedBox(height: ResponsiveLayout.spacing8),
+                  SizedBox(height: ResponsiveLayout.spacing12),
                   Text(
                     _websiteData!.description,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
@@ -269,8 +293,54 @@ class _HomeScreenState extends State<HomeScreen> {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ],
+                
+                // Stats row
+                SizedBox(height: ResponsiveLayout.spacing16),
+                Row(
+                  children: [
+                    _buildHeroStat('${_websiteData!.pages.length}', 'Pages'),
+                    SizedBox(width: ResponsiveLayout.spacing16),
+                    _buildHeroStat('${_websiteData!.pages.fold(0, (sum, page) => sum + page.content.images.length)}', 'Images'),
+                    SizedBox(width: ResponsiveLayout.spacing16),
+                    _buildHeroStat('${_websiteData!.pages.fold(0, (sum, page) => sum + page.content.links.length)}', 'Links'),
+                  ],
+                ),
               ],
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHeroStat(String value, String label) {
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: ResponsiveLayout.spacing12,
+        vertical: ResponsiveLayout.spacing8,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.2),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: Colors.white.withOpacity(0.3),
+          width: 1,
+        ),
+      ),
+      child: Column(
+        children: [
+          Text(
+            value,
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+          Text(
+            label,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Colors.white.withOpacity(0.8),
+                ),
           ),
         ],
       ),
@@ -351,12 +421,22 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Content Overview',
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.primary,
-              ),
+        Row(
+          children: [
+            Icon(
+              Icons.analytics_outlined,
+              color: Theme.of(context).colorScheme.primary,
+              size: 28,
+            ),
+            SizedBox(width: ResponsiveLayout.spacing8),
+            Text(
+              'Content Overview',
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+            ),
+          ],
         ),
         SizedBox(height: ResponsiveLayout.spacing16),
         
@@ -529,6 +609,12 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         Row(
           children: [
+            Icon(
+              Icons.explore_outlined,
+              color: Theme.of(context).colorScheme.primary,
+              size: 28,
+            ),
+            SizedBox(width: ResponsiveLayout.spacing8),
             Expanded(
               child: Text(
                 'Explore Pages',
@@ -538,11 +624,22 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
               ),
             ),
-            Text(
-              '${_websiteData!.pages.length} pages',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
+            Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: ResponsiveLayout.spacing12,
+                vertical: ResponsiveLayout.spacing6,
+              ),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primaryContainer,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Text(
+                '${_websiteData!.pages.length} pages',
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                      fontWeight: FontWeight.w600,
+                    ),
+              ),
             ),
           ],
         ),

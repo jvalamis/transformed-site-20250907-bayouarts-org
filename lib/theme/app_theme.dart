@@ -7,11 +7,11 @@ class AppTheme {
   // Design Rule #1: Material 3 with ColorScheme.fromSeed
   // Dynamic color scheme that adapts to content
   static const Color brandSeed = Color(0xFF6750A4); // Material 3 default
-  static const Color artsSeed = Color(0xFF8E24AA); // Purple for arts/culture
-  static const Color businessSeed = Color(0xFF1976D2); // Blue for business
-  static const Color educationSeed = Color(0xFF388E3C); // Green for education
-  static const Color healthSeed = Color(0xFFD32F2F); // Red for health
-  static const Color techSeed = Color(0xFFF57C00); // Orange for tech
+  static const Color artsSeed = Color(0xFF9C27B0); // Vibrant purple for arts/culture
+  static const Color businessSeed = Color(0xFF2196F3); // Bright blue for business
+  static const Color educationSeed = Color(0xFF4CAF50); // Fresh green for education
+  static const Color healthSeed = Color(0xFFE91E63); // Pink for health
+  static const Color techSeed = Color(0xFFFF9800); // Vibrant orange for tech
   
   /// Get dynamic seed color based on website content
   static Color getSeedColorForContent(String domain, String title, String description) {
