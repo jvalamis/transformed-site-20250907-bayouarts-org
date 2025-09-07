@@ -58,6 +58,14 @@ jobs:
           # Verify the placeholder is there
           grep -n 'base href="\$FLUTTER_BASE_HREF"' web/index.html || echo "ERROR: Base href placeholder not found!"
 
+      - name: Copy site-data.json to assets
+        run: |
+          # Ensure assets directory exists
+          mkdir -p assets
+          # Copy site-data.json to assets directory
+          cp web/site-data.json assets/site-data.json
+          echo "✅ Copied site-data.json to assets directory"
+
       - name: Build Flutter Web
         run: flutter build web --release --base-href /${{ github.event.repository.name }}/
 
