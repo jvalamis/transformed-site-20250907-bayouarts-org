@@ -55,7 +55,7 @@ class _EddieAppState extends State<EddieApp> {
     
     // 2) Load from bundled asset
     try {
-      final jsonString = await rootBundle.loadString('assets/content/content.json');
+      final jsonString = await rootBundle.loadString('assets/content.json');
       final jsonData = json.decode(jsonString) as Map<String, dynamic>;
       return EddieDoc.fromJson(jsonData);
     } catch (e) {
