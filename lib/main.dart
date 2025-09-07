@@ -49,19 +49,25 @@ class _WebsiteAppState extends State<WebsiteApp> {
 
   Future<void> _loadDynamicTheme() async {
     try {
+      print('Loading website data...');
       final data = await DataService.loadWebsiteData();
+      print('Website data loaded: ${data.domain}');
+      
       final seedColor = AppTheme.getSeedColorForContent(
         data.domain,
         data.title,
         data.description,
       );
-      
+      print('Seed color determined: $seedColor');
+
       setState(() {
         _lightTheme = _buildThemeWithSeed(seedColor, Brightness.light);
         _darkTheme = _buildThemeWithSeed(seedColor, Brightness.dark);
         _isLoading = false;
       });
+      print('Theme loaded successfully');
     } catch (e) {
+      print('Error loading theme: $e');
       // Fallback to default theme
       setState(() {
         _lightTheme = AppTheme.lightTheme;

@@ -21,6 +21,7 @@ class DataService {
       // If assets loading fails, use fallback data for now
       // TODO: Implement proper web loading
       print('Failed to load assets: $e');
+      print('Using fallback data with Bayou Arts content');
       
       // If loading fails, create a fallback data structure with Bayou Arts content
       _websiteData = WebsiteData(
