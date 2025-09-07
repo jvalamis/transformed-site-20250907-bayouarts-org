@@ -3,8 +3,8 @@
     "domain": "bayouarts.org",
     "baseUrl": "https://bayouarts.org/",
     "totalPages": 16,
-    "totalAssets": 49,
-    "crawledAt": "2025-09-07T16:53:26.682Z",
+    "totalAssets": 52,
+    "crawledAt": "2025-09-07T17:09:08.049Z",
     "title": "Home - Bayou Arts",
     "description": "Making Art Work The Bayou Regional Arts Council works to support arts access in the Assumption, Lafourche, St. Charles, St. James, St. John the Baptist, and Terrebonne parishes through grants, workshops, and networking opportunities for artists and organizations. Making Art Work The Bayou Regional Arts Council works to support arts access in the Assumption, Lafourche,",
     "keywords": ""
@@ -7909,7 +7909,7 @@
             "title": ""
           },
           {
-            "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg==",
+            "src": "https://bayouarts.org/wp-content/uploads/2024/05/BAF-stage-and-crowd.jpg",
             "alt": "BAF stage and crowd",
             "title": ""
           },
@@ -7939,17 +7939,17 @@
             "title": ""
           },
           {
-            "src": "https://bayouarts.org/wp-content/uploads/2024/07/30-sarah.jpg",
+            "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg==",
             "alt": "30 sarah",
             "title": ""
           },
           {
-            "src": "https://bayouarts.org/wp-content/uploads/2024/07/29-crowd.jpg",
+            "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg==",
             "alt": "29 crowd",
             "title": ""
           },
           {
-            "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg==",
+            "src": "https://bayouarts.org/wp-content/uploads/2025/08/5.png",
             "alt": "",
             "title": ""
           },
@@ -17851,6 +17851,27 @@
       "type": "image",
       "size": 1630885,
       "contentType": "image/jpeg"
+    },
+    {
+      "url": "https://bayouarts.org/wp-content/uploads/2024/05/BAF-stage-and-crowd.jpg",
+      "path": "wp-content/uploads/2024/05/BAF-stage-and-crowd.jpg",
+      "type": "image",
+      "size": 478041,
+      "contentType": "image/jpeg"
+    },
+    {
+      "url": "https://bayouarts.org/wp-content/uploads/2025/08/3.png",
+      "path": "wp-content/uploads/2025/08/3.png",
+      "type": "image",
+      "size": 3186673,
+      "contentType": "image/png"
+    },
+    {
+      "url": "https://bayouarts.org/wp-content/uploads/2025/08/5.png",
+      "path": "wp-content/uploads/2025/08/5.png",
+      "type": "image",
+      "size": 3155700,
+      "contentType": "image/png"
     },
     {
       "url": "https://bayouarts.org/wp-content/uploads/2023/04/Artists-Page-1024x768.jpg",
