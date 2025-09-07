@@ -69,7 +69,6 @@ class DataService {
         assets: [],
       );
       return _websiteData!;
-      }
     }
   }
 
