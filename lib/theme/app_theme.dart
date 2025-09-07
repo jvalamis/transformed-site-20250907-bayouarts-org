@@ -5,7 +5,39 @@ import '../utils/responsive_layout.dart';
 /// Comprehensive theme system implementing all design rules
 class AppTheme {
   // Design Rule #1: Material 3 with ColorScheme.fromSeed
+  // Dynamic color scheme that adapts to content
   static const Color brandSeed = Color(0xFF6750A4); // Material 3 default
+  static const Color artsSeed = Color(0xFF8E24AA); // Purple for arts/culture
+  static const Color businessSeed = Color(0xFF1976D2); // Blue for business
+  static const Color educationSeed = Color(0xFF388E3C); // Green for education
+  static const Color healthSeed = Color(0xFFD32F2F); // Red for health
+  static const Color techSeed = Color(0xFFF57C00); // Orange for tech
+  
+  /// Get dynamic seed color based on website content
+  static Color getSeedColorForContent(String domain, String title, String description) {
+    final content = '${domain.toLowerCase()} ${title.toLowerCase()} ${description.toLowerCase()}';
+    
+    if (content.contains('art') || content.contains('culture') || content.contains('creative') || 
+        content.contains('music') || content.contains('theater') || content.contains('gallery')) {
+      return artsSeed;
+    } else if (content.contains('business') || content.contains('corporate') || 
+               content.contains('company') || content.contains('enterprise')) {
+      return businessSeed;
+    } else if (content.contains('education') || content.contains('school') || 
+               content.contains('university') || content.contains('learning') || 
+               content.contains('academic')) {
+      return educationSeed;
+    } else if (content.contains('health') || content.contains('medical') || 
+               content.contains('hospital') || content.contains('clinic')) {
+      return healthSeed;
+    } else if (content.contains('tech') || content.contains('software') || 
+               content.contains('digital') || content.contains('app') || 
+               content.contains('development')) {
+      return techSeed;
+    }
+    
+    return brandSeed; // Default
+  }
   
   /// Light theme following all design rules
   static ThemeData get lightTheme {
@@ -19,24 +51,24 @@ class AppTheme {
       colorScheme: colorScheme,
       
       // Design Rule #4: Typography that sells the message
-      textTheme: _buildTextTheme(colorScheme),
+      textTheme: buildTextTheme(colorScheme),
       
       // Design Rule #6: Components & shape language
-      cardTheme: _buildCardTheme(),
-      appBarTheme: _buildAppBarTheme(colorScheme),
-      navigationBarTheme: _buildNavigationBarTheme(colorScheme),
-      navigationRailTheme: _buildNavigationRailTheme(colorScheme),
-      drawerTheme: _buildDrawerTheme(colorScheme),
-      listTileTheme: _buildListTileTheme(colorScheme),
-      chipTheme: _buildChipTheme(colorScheme),
-      buttonTheme: _buildButtonTheme(colorScheme),
-      elevatedButtonTheme: _buildElevatedButtonTheme(colorScheme),
-      outlinedButtonTheme: _buildOutlinedButtonTheme(colorScheme),
-      textButtonTheme: _buildTextButtonTheme(colorScheme),
-      inputDecorationTheme: _buildInputDecorationTheme(colorScheme),
+      cardTheme: buildCardTheme(),
+      appBarTheme: buildAppBarTheme(colorScheme),
+      navigationBarTheme: buildNavigationBarTheme(colorScheme),
+      navigationRailTheme: buildNavigationRailTheme(colorScheme),
+      drawerTheme: buildDrawerTheme(colorScheme),
+      listTileTheme: buildListTileTheme(colorScheme),
+      chipTheme: buildChipTheme(colorScheme),
+      buttonTheme: buildButtonTheme(colorScheme),
+      elevatedButtonTheme: buildElevatedButtonTheme(colorScheme),
+      outlinedButtonTheme: buildOutlinedButtonTheme(colorScheme),
+      textButtonTheme: buildTextButtonTheme(colorScheme),
+      inputDecorationTheme: buildInputDecorationTheme(colorScheme),
       
       // Design Rule #5: Motion = micro, not flashy
-      pageTransitionsTheme: _buildPageTransitionsTheme(),
+      pageTransitionsTheme: buildPageTransitionsTheme(),
       
       // Design Rule #8: Accessibility
       visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -55,24 +87,24 @@ class AppTheme {
       colorScheme: colorScheme,
       
       // Design Rule #4: Typography that sells the message
-      textTheme: _buildTextTheme(colorScheme),
+      textTheme: buildTextTheme(colorScheme),
       
       // Design Rule #6: Components & shape language
-      cardTheme: _buildCardTheme(),
-      appBarTheme: _buildAppBarTheme(colorScheme),
-      navigationBarTheme: _buildNavigationBarTheme(colorScheme),
-      navigationRailTheme: _buildNavigationRailTheme(colorScheme),
-      drawerTheme: _buildDrawerTheme(colorScheme),
-      listTileTheme: _buildListTileTheme(colorScheme),
-      chipTheme: _buildChipTheme(colorScheme),
-      buttonTheme: _buildButtonTheme(colorScheme),
-      elevatedButtonTheme: _buildElevatedButtonTheme(colorScheme),
-      outlinedButtonTheme: _buildOutlinedButtonTheme(colorScheme),
-      textButtonTheme: _buildTextButtonTheme(colorScheme),
-      inputDecorationTheme: _buildInputDecorationTheme(colorScheme),
+      cardTheme: buildCardTheme(),
+      appBarTheme: buildAppBarTheme(colorScheme),
+      navigationBarTheme: buildNavigationBarTheme(colorScheme),
+      navigationRailTheme: buildNavigationRailTheme(colorScheme),
+      drawerTheme: buildDrawerTheme(colorScheme),
+      listTileTheme: buildListTileTheme(colorScheme),
+      chipTheme: buildChipTheme(colorScheme),
+      buttonTheme: buildButtonTheme(colorScheme),
+      elevatedButtonTheme: buildElevatedButtonTheme(colorScheme),
+      outlinedButtonTheme: buildOutlinedButtonTheme(colorScheme),
+      textButtonTheme: buildTextButtonTheme(colorScheme),
+      inputDecorationTheme: buildInputDecorationTheme(colorScheme),
       
       // Design Rule #5: Motion = micro, not flashy
-      pageTransitionsTheme: _buildPageTransitionsTheme(),
+      pageTransitionsTheme: buildPageTransitionsTheme(),
       
       // Design Rule #8: Accessibility
       visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -83,7 +115,7 @@ class AppTheme {
   /// Typography.material2021() + GoogleFonts
   /// Headings clamp 1–2 lines; body LH ~1.4–1.6
   /// Clear hierarchy: Display → Headline → Title → Body/Label
-  static TextTheme _buildTextTheme(ColorScheme colorScheme) {
+  static TextTheme buildTextTheme(ColorScheme colorScheme) {
     final baseTextTheme = GoogleFonts.interTextTheme();
     
     return baseTextTheme.copyWith(
@@ -206,7 +238,7 @@ class AppTheme {
 
   /// Design Rule #6: Components & shape language
   /// Corners 12–16; low elevation; subtle dividers
-  static CardTheme _buildCardTheme() {
+  static CardTheme buildCardTheme() {
     return CardTheme(
       elevation: 2,
       shape: RoundedRectangleBorder(
@@ -216,7 +248,7 @@ class AppTheme {
     );
   }
 
-  static AppBarTheme _buildAppBarTheme(ColorScheme colorScheme) {
+  static AppBarTheme buildAppBarTheme(ColorScheme colorScheme) {
     return AppBarTheme(
       elevation: 0,
       centerTitle: false,
@@ -230,7 +262,7 @@ class AppTheme {
     );
   }
 
-  static NavigationBarThemeData _buildNavigationBarTheme(ColorScheme colorScheme) {
+  static NavigationBarThemeData buildNavigationBarTheme(ColorScheme colorScheme) {
     return NavigationBarThemeData(
       elevation: 3,
       backgroundColor: colorScheme.surface,
@@ -252,7 +284,7 @@ class AppTheme {
     );
   }
 
-  static NavigationRailThemeData _buildNavigationRailTheme(ColorScheme colorScheme) {
+  static NavigationRailThemeData buildNavigationRailTheme(ColorScheme colorScheme) {
     return NavigationRailThemeData(
       backgroundColor: colorScheme.surface,
       selectedIconTheme: IconThemeData(
@@ -276,7 +308,7 @@ class AppTheme {
     );
   }
 
-  static DrawerThemeData _buildDrawerTheme(ColorScheme colorScheme) {
+  static DrawerThemeData buildDrawerTheme(ColorScheme colorScheme) {
     return DrawerThemeData(
       backgroundColor: colorScheme.surface,
       shape: const RoundedRectangleBorder(
@@ -288,7 +320,7 @@ class AppTheme {
     );
   }
 
-  static ListTileThemeData _buildListTileTheme(ColorScheme colorScheme) {
+  static ListTileThemeData buildListTileTheme(ColorScheme colorScheme) {
     return ListTileThemeData(
       contentPadding: EdgeInsets.symmetric(
         horizontal: ResponsiveLayout.spacing16,
@@ -300,7 +332,7 @@ class AppTheme {
     );
   }
 
-  static ChipThemeData _buildChipTheme(ColorScheme colorScheme) {
+  static ChipThemeData buildChipTheme(ColorScheme colorScheme) {
     return ChipThemeData(
       backgroundColor: colorScheme.surfaceVariant,
       selectedColor: colorScheme.secondaryContainer,
@@ -319,7 +351,7 @@ class AppTheme {
     );
   }
 
-  static ButtonThemeData _buildButtonTheme(ColorScheme colorScheme) {
+  static ButtonThemeData buildButtonTheme(ColorScheme colorScheme) {
     return ButtonThemeData(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -331,7 +363,7 @@ class AppTheme {
     );
   }
 
-  static ElevatedButtonThemeData _buildElevatedButtonTheme(ColorScheme colorScheme) {
+  static ElevatedButtonThemeData buildElevatedButtonTheme(ColorScheme colorScheme) {
     return ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: colorScheme.primary,
@@ -352,7 +384,7 @@ class AppTheme {
     );
   }
 
-  static OutlinedButtonThemeData _buildOutlinedButtonTheme(ColorScheme colorScheme) {
+  static OutlinedButtonThemeData buildOutlinedButtonTheme(ColorScheme colorScheme) {
     return OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
         foregroundColor: colorScheme.primary,
@@ -372,7 +404,7 @@ class AppTheme {
     );
   }
 
-  static TextButtonThemeData _buildTextButtonTheme(ColorScheme colorScheme) {
+  static TextButtonThemeData buildTextButtonTheme(ColorScheme colorScheme) {
     return TextButtonThemeData(
       style: TextButton.styleFrom(
         foregroundColor: colorScheme.primary,
@@ -391,7 +423,7 @@ class AppTheme {
     );
   }
 
-  static InputDecorationTheme _buildInputDecorationTheme(ColorScheme colorScheme) {
+  static InputDecorationTheme buildInputDecorationTheme(ColorScheme colorScheme) {
     return InputDecorationTheme(
       filled: true,
       fillColor: colorScheme.surfaceVariant,
@@ -416,7 +448,7 @@ class AppTheme {
 
   /// Design Rule #5: Motion = micro, not flashy
   /// Durations ~150–300ms, Material easing
-  static PageTransitionsTheme _buildPageTransitionsTheme() {
+  static PageTransitionsTheme buildPageTransitionsTheme() {
     return const PageTransitionsTheme(
       builders: {
         TargetPlatform.android: CupertinoPageTransitionsBuilder(),

@@ -146,21 +146,133 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildBody() {
     return SingleChildScrollView(
-      padding: EdgeInsets.all(ResponsiveLayout.spacing16),
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          maxWidth: ResponsiveLayout.maxContentWidth,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildHeader(),
-            SizedBox(height: ResponsiveLayout.spacing32),
-            _buildContentPreview(),
-            SizedBox(height: ResponsiveLayout.spacing32),
-            _buildPagesGrid(),
-          ],
-        ),
+      child: Column(
+        children: [
+          // Design Rule #7: Images as First-Class Content - Hero Section
+          _buildHeroSection(),
+          // Main content with proper spacing
+          Padding(
+            padding: EdgeInsets.all(ResponsiveLayout.spacing16),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: ResponsiveLayout.maxContentWidth,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildHeader(),
+                  SizedBox(height: ResponsiveLayout.spacing32),
+                  _buildContentPreview(),
+                  SizedBox(height: ResponsiveLayout.spacing32),
+                  _buildPagesGrid(),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Design Rule #7: Images as First-Class Content - Hero Section
+  Widget _buildHeroSection() {
+    // Find the best hero image from the first page or any page
+    String? heroImageUrl;
+    String? heroImageAlt;
+    
+    for (final page in _websiteData!.pages) {
+      if (page.content.images.isNotEmpty) {
+        heroImageUrl = page.content.images.first.src;
+        heroImageAlt = page.content.images.first.alt;
+        break;
+      }
+    }
+
+    return Container(
+      height: 400,
+      width: double.infinity,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          // Hero image with gradient overlay
+          if (heroImageUrl != null)
+            ResponsiveImage(
+              imageUrl: heroImageUrl,
+              altText: heroImageAlt ?? '',
+              fit: BoxFit.cover,
+            )
+          else
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Theme.of(context).colorScheme.primary,
+                    Theme.of(context).colorScheme.secondary,
+                  ],
+                ),
+              ),
+            ),
+          
+          // Dark overlay for text readability
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.transparent,
+                  Colors.black.withOpacity(0.7),
+                ],
+              ),
+            ),
+          ),
+          
+          // Hero content
+          Positioned(
+            bottom: ResponsiveLayout.spacing32,
+            left: ResponsiveLayout.spacing16,
+            right: ResponsiveLayout.spacing16,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  _websiteData!.title,
+                  style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        shadows: [
+                          Shadow(
+                            offset: const Offset(0, 2),
+                            blurRadius: 4,
+                            color: Colors.black.withOpacity(0.5),
+                          ),
+                        ],
+                      ),
+                ),
+                if (_websiteData!.description.isNotEmpty) ...[
+                  SizedBox(height: ResponsiveLayout.spacing8),
+                  Text(
+                    _websiteData!.description,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          color: Colors.white.withOpacity(0.9),
+                          shadows: [
+                            Shadow(
+                              offset: const Offset(0, 1),
+                              blurRadius: 2,
+                              color: Colors.black.withOpacity(0.5),
+                            ),
+                          ],
+                        ),
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -169,31 +281,55 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Design Rule #4: Typography That Sells the Message
         Text(
-          _websiteData!.title,
-          style: Theme.of(context).textTheme.displaySmall?.copyWith(
+          'About ${_websiteData!.domain}',
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                 fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.primary,
               ),
         ),
+        SizedBox(height: ResponsiveLayout.spacing16),
+        
+        // Enhanced description with better typography
         if (_websiteData!.description.isNotEmpty) ...[
-          SizedBox(height: ResponsiveLayout.spacing8),
           Text(
             _websiteData!.description,
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  height: 1.6, // Design Rule #4: body LH ~1.4–1.6
                 ),
           ),
+          SizedBox(height: ResponsiveLayout.spacing16),
         ],
+        
+        // Enhanced keywords with better styling
         if (_websiteData!.keywords.isNotEmpty) ...[
-          SizedBox(height: ResponsiveLayout.spacing12),
+          Text(
+            'Key Topics',
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
+          ),
+          SizedBox(height: ResponsiveLayout.spacing8),
           Wrap(
             spacing: ResponsiveLayout.spacing8,
-            runSpacing: ResponsiveLayout.spacing4,
+            runSpacing: ResponsiveLayout.spacing8,
             children: _websiteData!.keywords
                 .split(',')
+                .where((keyword) => keyword.trim().isNotEmpty)
                 .map((keyword) => Chip(
-                      label: Text(keyword.trim()),
+                      label: Text(
+                        keyword.trim(),
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              fontWeight: FontWeight.w500,
+                            ),
+                      ),
                       visualDensity: VisualDensity.compact,
+                      backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+                      labelStyle: TextStyle(
+                        color: Theme.of(context).colorScheme.onSecondaryContainer,
+                      ),
                     ))
                 .toList(),
           ),
@@ -207,42 +343,178 @@ class _HomeScreenState extends State<HomeScreen> {
         .fold(0, (sum, page) => sum + page.content.images.length);
     final totalLinks = _websiteData!.pages
         .fold(0, (sum, page) => sum + page.content.links.length);
+    final totalHeadings = _websiteData!.pages
+        .fold(0, (sum, page) => sum + page.content.headings.length);
+    final totalParagraphs = _websiteData!.pages
+        .fold(0, (sum, page) => sum + page.content.paragraphs.length);
 
-    return Card(
-      child: Padding(
-        padding: EdgeInsets.all(ResponsiveLayout.spacing16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Content Overview',
+          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+        ),
+        SizedBox(height: ResponsiveLayout.spacing16),
+        
+        // Design Rule #6: Components & shape language - Enhanced cards
+        LayoutBuilder(
+          builder: (context, constraints) {
+            final isWide = constraints.maxWidth > 600;
+            return isWide 
+              ? _buildWideStatsGrid(totalImages, totalLinks, totalHeadings, totalParagraphs)
+              : _buildNarrowStatsGrid(totalImages, totalLinks, totalHeadings, totalParagraphs);
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildWideStatsGrid(int totalImages, int totalLinks, int totalHeadings, int totalParagraphs) {
+    return Row(
+      children: [
+        Expanded(
+          child: _buildEnhancedStatCard(
+            icon: Icons.pages_outlined,
+            label: 'Pages',
+            value: _websiteData!.pages.length.toString(),
+            color: Theme.of(context).colorScheme.primary,
+          ),
+        ),
+        SizedBox(width: ResponsiveLayout.spacing16),
+        Expanded(
+          child: _buildEnhancedStatCard(
+            icon: Icons.image_outlined,
+            label: 'Images',
+            value: totalImages.toString(),
+            color: Theme.of(context).colorScheme.secondary,
+          ),
+        ),
+        SizedBox(width: ResponsiveLayout.spacing16),
+        Expanded(
+          child: _buildEnhancedStatCard(
+            icon: Icons.link_outlined,
+            label: 'Links',
+            value: totalLinks.toString(),
+            color: Theme.of(context).colorScheme.tertiary,
+          ),
+        ),
+        SizedBox(width: ResponsiveLayout.spacing16),
+        Expanded(
+          child: _buildEnhancedStatCard(
+            icon: Icons.text_fields_outlined,
+            label: 'Content',
+            value: '${totalHeadings + totalParagraphs}',
+            color: Theme.of(context).colorScheme.primaryContainer,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildNarrowStatsGrid(int totalImages, int totalLinks, int totalHeadings, int totalParagraphs) {
+    return Column(
+      children: [
+        Row(
           children: [
-            Text(
-              'Content Overview',
-              style: Theme.of(context).textTheme.titleLarge,
+            Expanded(
+              child: _buildEnhancedStatCard(
+                icon: Icons.pages_outlined,
+                label: 'Pages',
+                value: _websiteData!.pages.length.toString(),
+                color: Theme.of(context).colorScheme.primary,
+              ),
             ),
-            SizedBox(height: ResponsiveLayout.spacing16),
-            Row(
-              children: [
-                Expanded(
-                  child: _buildStatItem(
-                    icon: Icons.pages,
-                    label: 'Pages',
-                    value: _websiteData!.pages.length.toString(),
+            SizedBox(width: ResponsiveLayout.spacing16),
+            Expanded(
+              child: _buildEnhancedStatCard(
+                icon: Icons.image_outlined,
+                label: 'Images',
+                value: totalImages.toString(),
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: ResponsiveLayout.spacing16),
+        Row(
+          children: [
+            Expanded(
+              child: _buildEnhancedStatCard(
+                icon: Icons.link_outlined,
+                label: 'Links',
+                value: totalLinks.toString(),
+                color: Theme.of(context).colorScheme.tertiary,
+              ),
+            ),
+            SizedBox(width: ResponsiveLayout.spacing16),
+            Expanded(
+              child: _buildEnhancedStatCard(
+                icon: Icons.text_fields_outlined,
+                label: 'Content',
+                value: '${totalHeadings + totalParagraphs}',
+                color: Theme.of(context).colorScheme.primaryContainer,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildEnhancedStatCard({
+    required IconData icon,
+    required String label,
+    required String value,
+    required Color color,
+  }) {
+    return Card(
+      elevation: 2,
+      child: Container(
+        padding: EdgeInsets.all(ResponsiveLayout.spacing16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              color.withOpacity(0.1),
+              color.withOpacity(0.05),
+            ],
+          ),
+        ),
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.all(ResponsiveLayout.spacing12),
+              decoration: BoxDecoration(
+                color: color.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(
+                icon,
+                size: 32,
+                color: color,
+              ),
+            ),
+            SizedBox(height: ResponsiveLayout.spacing12),
+            Text(
+              value,
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: color,
                   ),
-                ),
-                Expanded(
-                  child: _buildStatItem(
-                    icon: Icons.image,
-                    label: 'Images',
-                    value: totalImages.toString(),
+            ),
+            SizedBox(height: ResponsiveLayout.spacing4),
+            Text(
+              label,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    fontWeight: FontWeight.w500,
                   ),
-                ),
-                Expanded(
-                  child: _buildStatItem(
-                    icon: Icons.link,
-                    label: 'Links',
-                    value: totalLinks.toString(),
-                  ),
-                ),
-              ],
             ),
           ],
         ),
@@ -250,42 +522,29 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildStatItem({
-    required IconData icon,
-    required String label,
-    required String value,
-  }) {
-    return Column(
-      children: [
-        Icon(
-          icon,
-          size: 32,
-          color: Theme.of(context).colorScheme.primary,
-        ),
-        SizedBox(height: ResponsiveLayout.spacing8),
-        Text(
-          value,
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-        ),
-        Text(
-          label,
-          style: Theme.of(context).textTheme.bodySmall,
-        ),
-      ],
-    );
-  }
 
   Widget _buildPagesGrid() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Explore Pages',
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.bold,
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                'Explore Pages',
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
               ),
+            ),
+            Text(
+              '${_websiteData!.pages.length} pages',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+            ),
+          ],
         ),
         SizedBox(height: ResponsiveLayout.spacing16),
         LayoutBuilder(
@@ -296,14 +555,14 @@ class _HomeScreenState extends State<HomeScreen> {
               physics: const NeverScrollableScrollPhysics(),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: crossAxisCount,
-                childAspectRatio: 1.2,
+                childAspectRatio: 0.8, // Better aspect ratio for content
                 crossAxisSpacing: ResponsiveLayout.spacing16,
                 mainAxisSpacing: ResponsiveLayout.spacing16,
               ),
               itemCount: _websiteData!.pages.length,
               itemBuilder: (context, index) {
                 final page = _websiteData!.pages[index];
-                return _buildPageCard(page);
+                return _buildEnhancedPageCard(page, index);
               },
             );
           },
@@ -312,52 +571,208 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildPageCard(PageData page) {
+  Widget _buildEnhancedPageCard(PageData page, int index) {
+    final hasImage = page.content.images.isNotEmpty;
+    final hasContent = page.content.headings.isNotEmpty || page.content.paragraphs.isNotEmpty;
+    
     return Card(
+      elevation: 3,
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: () => _navigateToPage(page),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (page.content.images.isNotEmpty)
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            gradient: hasImage 
+              ? null 
+              : LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Theme.of(context).colorScheme.primaryContainer.withOpacity(0.1),
+                    Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.1),
+                  ],
+                ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Hero image or placeholder
+              if (hasImage)
+                Expanded(
+                  flex: 3,
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      ResponsiveImage(
+                        imageUrl: page.content.images.first.src,
+                        altText: page.content.images.first.alt,
+                        fit: BoxFit.cover,
+                      ),
+                      // Gradient overlay for text readability
+                      Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.transparent,
+                              Colors.black.withOpacity(0.3),
+                            ],
+                          ),
+                        ),
+                      ),
+                      // Page number badge
+                      Positioned(
+                        top: ResponsiveLayout.spacing8,
+                        right: ResponsiveLayout.spacing8,
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: ResponsiveLayout.spacing8,
+                            vertical: ResponsiveLayout.spacing4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.primary,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            '${index + 1}',
+                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                  color: Theme.of(context).colorScheme.onPrimary,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              else
+                Expanded(
+                  flex: 2,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                          Theme.of(context).colorScheme.secondary.withOpacity(0.1),
+                        ],
+                      ),
+                    ),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.article_outlined,
+                            size: 48,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                          SizedBox(height: ResponsiveLayout.spacing8),
+                          Text(
+                            'Page ${index + 1}',
+                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              
+              // Content section
               Expanded(
                 flex: 2,
-                child: ResponsiveImage(
-                  imageUrl: page.content.images.first.src,
-                  altText: page.content.images.first.alt,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            Expanded(
-              flex: 1,
-              child: Padding(
-                padding: EdgeInsets.all(ResponsiveLayout.spacing12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      page.title,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    if (page.description.isNotEmpty) ...[
-                      SizedBox(height: ResponsiveLayout.spacing4),
+                child: Padding(
+                  padding: EdgeInsets.all(ResponsiveLayout.spacing16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Title
                       Text(
-                        page.description,
-                        style: Theme.of(context).textTheme.bodySmall,
+                        page.title,
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: hasImage 
+                                ? Colors.white 
+                                : Theme.of(context).colorScheme.onSurface,
+                            ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
+                      SizedBox(height: ResponsiveLayout.spacing8),
+                      
+                      // Description
+                      if (page.description.isNotEmpty) ...[
+                        Expanded(
+                          child: Text(
+                            page.description,
+                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                  color: hasImage 
+                                    ? Colors.white.withOpacity(0.9)
+                                    : Theme.of(context).colorScheme.onSurfaceVariant,
+                                  height: 1.4,
+                                ),
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                      
+                      // Content stats
+                      if (hasContent) ...[
+                        SizedBox(height: ResponsiveLayout.spacing8),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.text_fields_outlined,
+                              size: 16,
+                              color: hasImage 
+                                ? Colors.white.withOpacity(0.7)
+                                : Theme.of(context).colorScheme.onSurfaceVariant,
+                            ),
+                            SizedBox(width: ResponsiveLayout.spacing4),
+                            Text(
+                              '${page.content.headings.length + page.content.paragraphs.length} items',
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: hasImage 
+                                      ? Colors.white.withOpacity(0.7)
+                                      : Theme.of(context).colorScheme.onSurfaceVariant,
+                                  ),
+                            ),
+                            if (page.content.images.length > 1) ...[
+                              SizedBox(width: ResponsiveLayout.spacing8),
+                              Icon(
+                                Icons.image_outlined,
+                                size: 16,
+                                color: hasImage 
+                                  ? Colors.white.withOpacity(0.7)
+                                  : Theme.of(context).colorScheme.onSurfaceVariant,
+                              ),
+                              SizedBox(width: ResponsiveLayout.spacing4),
+                              Text(
+                                '${page.content.images.length}',
+                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: hasImage 
+                                        ? Colors.white.withOpacity(0.7)
+                                        : Theme.of(context).colorScheme.onSurfaceVariant,
+                                    ),
+                              ),
+                            ],
+                          ],
+                        ),
+                      ],
                     ],
-                  ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
