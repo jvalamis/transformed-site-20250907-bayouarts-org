@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 import 'eddie_doc.dart';
 import 'eddie_page.dart';
 import 'responsive_scaffold.dart';
@@ -53,13 +54,18 @@ class _EddieAppState extends State<EddieApp> {
       throw UnimplementedError('URL loading not implemented yet');
     }
     
-    // 2) Load from bundled asset
+    // 2) Load from web root using HTTP
     try {
-      print('Loading content.json from assets...');
-      final jsonString = await rootBundle.loadString('assets/content.json');
-      final jsonData = json.decode(jsonString) as Map<String, dynamic>;
-      print('Successfully loaded content.json');
-      return EddieDoc.fromJson(jsonData);
+      print('Loading content.json from web root...');
+      final url = Uri.base.resolve('content.json');
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(response.body) as Map<String, dynamic>;
+        print('Successfully loaded content.json from web root');
+        return EddieDoc.fromJson(jsonData);
+      } else {
+        throw Exception('Failed to load content.json: ${response.statusCode}');
+      }
     } catch (e) {
       print('Failed to load content.json: $e');
       // 3) Fallback to default content
