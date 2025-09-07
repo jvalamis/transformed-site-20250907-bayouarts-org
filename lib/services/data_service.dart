@@ -27,8 +27,8 @@ class DataService {
         // Since we can't use http package, we'll use the fallback data for now
         throw Exception('Web loading not implemented yet');
       } catch (webError) {
-      // If loading fails, create a fallback data structure with Bayou Arts content
-      _websiteData = WebsiteData(
+        // If loading fails, create a fallback data structure with Bayou Arts content
+        _websiteData = WebsiteData(
         domain: 'bayouarts.org',
         originalUrl: 'https://bayouarts.org/',
         crawledAt: DateTime.now(),
@@ -68,6 +68,7 @@ class DataService {
         assets: [],
       );
       return _websiteData!;
+      }
     }
   }
 
