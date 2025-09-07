@@ -42,26 +42,9 @@ class _EddieAppState extends State<EddieApp> {
   }
 
   Future<EddieDoc> _loadEddieDoc() async {
-    // 1) Try to load from URL parameter ?data=...
-    final queryParams = Uri.base.queryParameters;
-    if (queryParams.containsKey('data')) {
-      final dataUrl = queryParams['data']!;
-      final resolvedUrl = Uri.base.resolve(dataUrl);
-      
-      // For now, we'll use a simple HTTP request
-      // In a real app, you'd use the http package
-      throw UnimplementedError('URL loading not implemented yet');
-    }
-    
-    // 2) Load from bundled asset
-    try {
-      final jsonString = await rootBundle.loadString('assets/content.json');
-      final jsonData = json.decode(jsonString) as Map<String, dynamic>;
-      return EddieDoc.fromJson(jsonData);
-    } catch (e) {
-      // 3) Fallback to default content
-      return _createFallbackDoc();
-    }
+    // For now, always use fallback content to test the app
+    print('Loading Eddie document...');
+    return _createFallbackDoc();
   }
 
   EddieDoc _createFallbackDoc() {
