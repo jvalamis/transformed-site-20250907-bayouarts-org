@@ -9,8 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  eddie_renderer:
-    path: packages/eddie_renderer
+  google_fonts: ^6.1.0
 
 dev_dependencies:
   flutter_test:
