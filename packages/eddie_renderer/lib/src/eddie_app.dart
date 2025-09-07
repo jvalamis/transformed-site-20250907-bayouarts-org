@@ -79,7 +79,7 @@ class _EddieAppState extends State<EddieApp> {
         PageDoc(
           slug: 'home',
           title: 'Welcome to Eddie',
-          hero: Hero(
+          hero: EddieHero(
             title: 'Welcome to Eddie',
             subtitle: 'Universal content renderer for any website',
           ),
