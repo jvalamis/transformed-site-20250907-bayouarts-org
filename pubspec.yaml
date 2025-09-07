@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   eddie_renderer:
-    path: ../packages/eddie_renderer
+    path: packages/eddie_renderer
 
 dev_dependencies:
   flutter_test:
