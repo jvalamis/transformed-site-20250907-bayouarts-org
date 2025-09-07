@@ -96,7 +96,7 @@ class NavItem {
 class PageDoc {
   final String slug;
   final String title;
-  final Hero? hero;
+  final EddieHero? hero;
   final List<Section> sections;
 
   PageDoc({
@@ -111,7 +111,7 @@ class PageDoc {
       slug: json['slug'] as String,
       title: json['title'] as String,
       hero: json['hero'] != null
-          ? Hero.fromJson(json['hero'] as Map<String, dynamic>)
+          ? EddieHero.fromJson(json['hero'] as Map<String, dynamic>)
           : null,
       sections: (json['sections'] as List)
           .map((item) => Section.fromJson(item as Map<String, dynamic>))
@@ -129,19 +129,19 @@ class PageDoc {
   }
 }
 
-class Hero {
+class EddieHero {
   final String? title;
   final String? subtitle;
   final String? image;
 
-  Hero({
+  EddieHero({
     this.title,
     this.subtitle,
     this.image,
   });
 
-  factory Hero.fromJson(Map<String, dynamic> json) {
-    return Hero(
+  factory EddieHero.fromJson(Map<String, dynamic> json) {
+    return EddieHero(
       title: json['title'] as String?,
       subtitle: json['subtitle'] as String?,
       image: json['image'] as String?,

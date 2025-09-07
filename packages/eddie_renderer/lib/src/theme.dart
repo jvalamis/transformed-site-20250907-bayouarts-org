@@ -173,20 +173,6 @@ class EddieTheme {
     return NavigationRailThemeData(
       backgroundColor: colorScheme.surface,
       indicatorColor: colorScheme.secondaryContainer,
-      labelTextStyle: WidgetStateProperty.resolveWith((states) {
-        if (states.contains(WidgetState.selected)) {
-          return GoogleFonts.inter(
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-            color: colorScheme.onSurface,
-          );
-        }
-        return GoogleFonts.inter(
-          fontSize: 12,
-          fontWeight: FontWeight.w400,
-          color: colorScheme.onSurfaceVariant,
-        );
-      }),
     );
   }
 
